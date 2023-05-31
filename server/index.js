@@ -9,7 +9,7 @@ app.use(cors({ origin: "*" }));
 const userrouter = require("./routes/media");
 const username = "vikas";
 const password = "rj7UwoMJno5GuG1i";
-const databaseName = "TACOdb1";
+const databaseName = "TACOdb";
 
 const mongodburl = `mongodb+srv://${username}:${password}@TACOtest.1gztzk2.mongodb.net/${databaseName}?retryWrites=true&w=majority`;
 

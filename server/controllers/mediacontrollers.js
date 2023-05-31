@@ -6,21 +6,50 @@ exports.getAll = async (req, res) => {
     let collectionName = "2023-05-29";
     const db = mongoose.connection.getClient(); // Get the MongoDB client object
     const collection = db.db().collection(collectionName);
-
+    console.log(collection);
     const data = await collection.find({}).toArray();
 
-       const convertedData = data.map((item) => {
-         const startTimestamp = convertUnixTimestamp(item.start_timestamp);
-         const endTimestamp = convertUnixTimestamp(item.end_timestamp);
+    const convertedData = data.map((item) => {
+      const startTimestamp = convertUnixTimestamp(item.start_timestamp);
+      const endTimestamp = convertUnixTimestamp(item.end_timestamp);
 
-         return {
-           ...item,
-           start_timestamp: startTimestamp,
-           end_timestamp: endTimestamp,
-         };
-       });
+      return {
+        ...item,
+        start_timestamp: startTimestamp,
+        end_timestamp: endTimestamp,
+      };
+    });
 
-       res.json(convertedData);
+    res.json(convertedData);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    res.status(500).json({ error: "Error fetching data" });
+  }
+};
+
+exports.getAllDate = async (req, res) => {
+  try {
+    let collectionName = req.body.date;
+    
+    const db = mongoose.connection.getClient(); // Get the MongoDB client object
+    const collection = db.db().collection(collectionName);
+   
+    const data = await collection.find({}).toArray();
+
+    const convertedData = data.map((item) => {
+      const startTimestamp = convertUnixTimestamp(item.start_timestamp);
+      const endTimestamp = convertUnixTimestamp(item.end_timestamp);
+
+      return {
+        ...item,
+        start_timestamp: startTimestamp,
+        end_timestamp: endTimestamp,
+      };
+    });
+    // console.log("something");
+    console.log(convertedData);
+    // console.log("nothing");
+    res.json(convertedData);
   } catch (error) {
     console.error("Error fetching data:", error);
     res.status(500).json({ error: "Error fetching data" });
@@ -34,7 +63,6 @@ function convertUnixTimestamp(encodedTimestamp) {
 
   return formattedTime;
 }
-
 
 exports.createAll = async (req, res) => {
   try {
