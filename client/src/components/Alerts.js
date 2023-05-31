@@ -9,28 +9,27 @@ import DatePicker from "react-date-picker";
 
 function Alerts() {
   const [data_1, setdata_1] = useState([]);
-  useEffect(() => {
-    axios.get("https://sep-main-1.onrender.com/api/").then((obj) => {
-      if (obj.data) {
-        setdata_1(obj.data);
-
-        console.log(data_1);
-      }
-    });
-  }, []);
   const [selectedDate, setSelectedDate] = useState("2023-05-30");
+
+  useEffect(() => {
+    axios
+      .post("http://localhost:5006/api/getalldata", { date: selectedDate })
+      .then((obj) => {
+        if (obj.data) {
+          setdata_1(obj.data);
+
+          console.log(data_1);
+        } else {
+          setdata_1(null);
+        }
+      });
+  }, [selectedDate]);
 
   const handleDateChange = (event) => {
     const date = event.target.value;
     setSelectedDate(date);
     console.log(date);
-    axios.post("http://localhost:5006/api/getalldata",{date:selectedDate}).then((obj) => {
-      if (obj.data) {
-        setdata_1(obj.data);
-      }
-    }).catch((error) => {
-      console.log(error)
-    });
+   
   };
   function UnixTimestampConversion(encodedtimestamp) {
     const unixTimestamp = encodedtimestamp;

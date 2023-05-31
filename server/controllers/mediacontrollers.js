@@ -1,39 +1,41 @@
 const mediaschema = require("../models/media");
 const mongoose = require("mongoose");
 
-exports.getAll = async (req, res) => {
-  try {
-    let collectionName = "2023-05-29";
-    const db = mongoose.connection.getClient(); // Get the MongoDB client object
-    const collection = db.db().collection(collectionName);
-    console.log(collection);
-    const data = await collection.find({}).toArray();
+// exports.getAll = async (req, res) => {
+//   try {
+//     let collectionName = "2023-05-30";
+//     const db = mongoose.connection.getClient(); // Get the MongoDB client object
+//     const collection = db.db().collection(collectionName);
+//     console.log(collection);
+//     const data = await collection.find({}).toArray();
 
-    const convertedData = data.map((item) => {
-      const startTimestamp = convertUnixTimestamp(item.start_timestamp);
-      const endTimestamp = convertUnixTimestamp(item.end_timestamp);
+//     const convertedData = data.map((item) => {
+//       const startTimestamp = convertUnixTimestamp(item.start_timestamp);
+//       const endTimestamp = convertUnixTimestamp(item.end_timestamp);
 
-      return {
-        ...item,
-        start_timestamp: startTimestamp,
-        end_timestamp: endTimestamp,
-      };
-    });
+//       return {
+//         ...item,
+//         start_timestamp: startTimestamp,
+//         end_timestamp: endTimestamp,
+//       };
+//     });
 
-    res.json(convertedData);
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    res.status(500).json({ error: "Error fetching data" });
-  }
-};
+//     res.json(convertedData);
+//   } catch (error) {
+//     console.error("Error fetching data:", error);
+//     res.status(500).json({ error: "Error fetching data" });
+//   }
+// };
 
 exports.getAllDate = async (req, res) => {
   try {
     let collectionName = req.body.date;
-    
     const db = mongoose.connection.getClient(); // Get the MongoDB client object
     const collection = db.db().collection(collectionName);
-   
+    if(collection){}
+    else{
+      res.json([]);
+    }
     const data = await collection.find({}).toArray();
 
     const convertedData = data.map((item) => {
